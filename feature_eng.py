@@ -3,6 +3,9 @@ from sklearn.preprocessing import StandardScaler
 import seaborn as sns
 import matplotlib.pyplot as plt
 df = pd.read_csv("Housing.csv")
+#Data Cleaning
+print(df.isnull().sum())
+#there is no missing values 
 print("Before Transformation")
 print(df)
 
