@@ -80,14 +80,5 @@ def predict():
 
     return render_template('index.html', prediction_text=f"Predicted House Price: ₹ {predicted_price}", options=dropdown_options)
 
-#if __name__ == '__main__':
-    #app.run(debug=True)
 if __name__ == '__main__':
-    import webbrowser
-    import threading
-
-    def open_browser():
-        webbrowser.open_new("http://127.0.0.1:5000/")
-
-    threading.Timer(1.25, open_browser).start()
     app.run(debug=True)
