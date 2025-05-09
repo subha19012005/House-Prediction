@@ -1,0 +1,20 @@
+<form action="/predict" method="post">
+    <label>Area:</label><input type="number" step="any" name="area" required><br><br>
+    <label>Bedrooms:</label><input type="number" step="any" name="bedrooms" required><br><br>
+    <label>Bathrooms:</label><input type="number" step="any" name="bathrooms" required><br><br>
+    <label>Stories:</label><input type="number" step="any" name="stories" required><br><br>
+    <label>Parking:</label><input type="number" step="any" name="parking" required><br><br>
+    <label>Price per sqft:</label><input type="number" step="any" name="price_per_sqft" required><br><br>
+    <label>Total rooms:</label><input type="number" step="any" name="total_rooms" required><br><br>
+
+    {% for field, values in options.items() %}
+        <label>{{ field.replace('_', ' ').capitalize() }}:</label>
+        <select name="{{ field }}" required>
+            {% for value in values %}
+                <option value="{{ value }}">{{ value }}</option>
+            {% endfor %}
+        </select><br><br>
+    {% endfor %}
+
+    <input type="submit" value="Predict Price">
+</form>
