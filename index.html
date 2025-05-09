@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>House Price Predictor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f0f4f8;
+            --text-color: #333;
+            --form-bg: #fff;
+            --input-bg: #fff;
+            --border-color: #ccc;
+            --btn-bg: #007bff;
+            --btn-hover: #0056b3;
+            --success-color: #27ae60;
+        }
+
+        body.dark {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --form-bg: #1e1e1e;
+            --input-bg: #2a2a2a;
+            --border-color: #444;
+            --btn-bg: #1a73e8;
+            --btn-hover: #0c5adb;
+            --success-color: #4caf50;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        h2 {
+            color: var(--text-color);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .toggle-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            background: var(--form-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin: auto;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 40px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        input[type="number"],
+        select {
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            background-color: var(--input-bg);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            border-color: var(--btn-bg);
+            outline: none;
+        }
+
+        .full-width {
+            grid-column: span 2;
+            text-align: center;
+        }
+
+        input[type="submit"] {
+            background-color: var(--btn-bg);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 200px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: var(--btn-hover);
+        }
+
+        h3 {
+            margin-top: 30px;
+            color: var(--success-color);
+            text-align: center;
+        }
+
+        .dark-toggle {
+            cursor: pointer;
+            background-color: var(--form-bg);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-color);
+            transition: background 0.3s;
+        }
+
+        .dark-toggle:hover {
+            background-color: var(--btn-bg);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            form {
+                grid-template-columns: 1fr;
+            }
+            .full-width {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>🏠 House Price Prediction</h2>
+
+    <div class="toggle-container">
+        <button class="dark-toggle" onclick="toggleDarkMode()" id="darkModeBtn">
+            <i class="fas fa-moon" id="darkIcon"></i>
+        </button>
+    </div>
+
+    <div class="form-container">
+        <form action="/predict" method="post">
+            <!-- Left column -->
+            <div class="form-group">
+                <label>Area (sqft):</label>
+                <input type="number" name="area" required>
+            </div>
+            <div class="form-group">
+                <label>Bedrooms:</label>
+                <input type="number" name="bedrooms" required>
+            </div>
+            <div class="form-group">
+                <label>Bathrooms:</label>
+                <input type="number" name="bathrooms" required>
+            </div>
+            <div class="form-group">
+                <label>Stories:</label>
+                <input type="number" name="stories" required>
+            </div>
+            <div class="form-group">
+                <label>Parking (No. of spots):</label>
+                <input type="number" name="parking" required>
+            </div>
+            <div class="form-group">
+                <label>Mainroad:</label>
+                <select name="mainroad" required>
+                    {% for value in options.mainroad %}
+                        <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Right column -->
+            <div class="form-group">
+                <label>Guestroom:</label>
+                <select name="guestroom" required>
+                    {% for value in options.guestroom %}
+                        <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Basement:</label>
+                <select name="basement" required>
+                    {% for value in options.basement %}
+                        <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Hotwaterheating:</label>
+                <select name="hotwaterheating" required>
+                    {% for value in options.hotwaterheating %}
+                        <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Airconditioning:</label>
+                <select name="airconditioning" required>
+                    {% for value in options.airconditioning %}
+                        <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Prefarea:</label>
+                <select name="prefarea" required>
+                    {% for value in options.prefarea %}
+                        <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Furnishingstatus:</label>
+                <select name="furnishingstatus" required>
+                    {% for value in options.furnishingstatus %}
+                        <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="full-width">
+                <input type="submit" value="Predict Price">
+            </div>
+        </form>
+
+        {% if prediction_text %}
+            <h3>{{ prediction_text }}</h3>
+        {% endif %}
+    </div>
+
+    <script>
+        // Check localStorage for dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark');
+            document.getElementById('darkIcon').classList.remove('fa-moon');
+            document.getElementById('darkIcon').classList.add('fa-sun');
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+            const icon = document.getElementById('darkIcon');
+            if (document.body.classList.contains('dark')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('darkMode', 'true');  // Save dark mode in localStorage
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('darkMode', 'false');  // Save light mode in localStorage
+            }
+        }
+    </script>
+</body>
+</html>
