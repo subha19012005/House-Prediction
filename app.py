@@ -3,8 +3,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
-
-
+import os
 
 app = Flask(__name__)
 
@@ -24,9 +23,7 @@ categorical_features = ['mainroad', 'guestroom', 'basement', 'hotwaterheating',
 numerical_features = ['area', 'bedrooms', 'bathrooms', 'stories', 'parking']
 
 preprocessor = ColumnTransformer(
-    transformers=[
-        ('cat', OneHotEncoder(drop='first'), categorical_features)
-    ],
+    transformers=[('cat', OneHotEncoder(drop='first'), categorical_features)],
     remainder='passthrough'  # Keep numerical features
 )
 
@@ -80,8 +77,6 @@ def predict():
 
     return render_template('index.html', prediction_text=f"Predicted House Price: ₹ {predicted_price}", options=dropdown_options)
 
-#if __name__ == '__main__':
-    #app.run(debug=True)
 if __name__ == '__main__':
     import webbrowser
     import threading
@@ -89,5 +84,8 @@ if __name__ == '__main__':
     def open_browser():
         webbrowser.open_new("http://127.0.0.1:5000/")
 
+    # For local development (you can remove this in production if not needed)
     threading.Timer(1.25, open_browser).start()
-    app.run(debug=True)
+
+    # Use dynamic port from environment or default to 5000
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)
