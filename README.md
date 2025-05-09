@@ -49,11 +49,11 @@ The dataset `Housing.csv` includes features such as:
 ## 🤖 Models
 
 ### ✅ Preferred: Random Forest Regressor
-- Implemented in `app_rf.py`
+- Implemented in `app.py`
 - Ensemble-based model using 100 trees for robust performance
 
 ### Optional: Linear Regression
-- Implemented in `app_linear.py`
+- Implemented in `linearregression.py`
 - Simpler, useful for comparison and interpretability
 
 ---
